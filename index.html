@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}FitBuddy — Create your plan{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+    <div>
+        <p class="eyebrow">AI-POWERED FITNESS PLANNER</p>
+        <h1>Build a plan that fits your week.</h1>
+        <p>
+            Enter a few details and FitBuddy creates a structured 7-day
+            routine plus a practical nutrition or recovery tip.
+        </p>
+    </div>
+    <div class="hero-card">
+        🏃‍♀️
+        <strong>7 days</strong>
+        <span>Personalized routine</span>
+    </div>
+</section>
+
+{% if error %}
+<div class="alert">{{ error }}</div>
+{% endif %}
+
+{% set f = form or {} %}
+
+<section class="card">
+    <h2>Your fitness profile</h2>
+
+    <form method="post" action="/generate-workout" class="grid-form">
+
+        <label>
+            Name
+            <input name="username" required minlength="2" maxlength="120"
+                   placeholder="Your name" value="{{ f.username or '' }}">
+        </label>
+
+        <label>
+            User ID
+            <input name="user_id" required minlength="2" maxlength="80"
+                   pattern="[A-Za-z0-9_\-]+" placeholder="e.g. priya01"
+                   title="Letters, numbers, - and _ only"
+                   value="{{ f.user_id or '' }}">
+        </label>
+
+        <label>
+            Age
+            <input type="number" name="age" min="13" max="100" required
+                   value="{{ f.age or '' }}">
+        </label>
+
+        <label>
+            Weight (kg)
+            <input type="number" name="weight" min="20.1" max="400" step="0.1"
+                   required value="{{ f.weight or '' }}">
+        </label>
+
+        <label>
+            Fitness goal
+            <select name="goal" required>
+                {% for value in ["weight loss", "muscle gain", "general wellness", "flexibility", "endurance"] %}
+                <option value="{{ value }}" {% if f.goal == value %}selected{% endif %}>
+                    {{ value|capitalize }}
+                </option>
+                {% endfor %}
+            </select>
+        </label>
+
+        <label>
+            Workout intensity
+            <select name="intensity" required>
+                {% set current = f.intensity or "medium" %}
+                {% for value in ["low", "medium", "high"] %}
+                <option value="{{ value }}" {% if current == value %}selected{% endif %}>
+                    {{ value|capitalize }}
+                </option>
+                {% endfor %}
+            </select>
+        </label>
+
+        <div class="full">
+            <button type="submit">✨ Generate my 7-day plan</button>
+        </div>
+    </form>
+</section>
+
+<section class="info-grid">
+    <div>
+        <h3>Personalized</h3>
+        <p>Goal and intensity are used to shape the schedule.</p>
+    </div>
+    <div>
+        <h3>Adaptive</h3>
+        <p>Submit feedback and regenerate the plan.</p>
+    </div>
+    <div>
+        <h3>Persistent</h3>
+        <p>Your profile and generated plans are stored in SQLite.</p>
+    </div>
+</section>
+
+{% endblock %}

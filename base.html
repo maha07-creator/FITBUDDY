@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}FitBuddy{% endblock %}</title>
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+
+<header class="topbar">
+    <a class="brand" href="/">
+        FitBuddy
+        <span>AI Wellness Planner</span>
+    </a>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/docs">API Docs</a>
+        <a href="/view-all-users">Dashboard</a>
+    </nav>
+</header>
+
+<main class="container">
+    {% block content %}{% endblock %}
+</main>
+
+<footer>
+    FitBuddy is an educational wellness app.
+    AI output is general information, not medical advice.
+</footer>
+
+</body>
+</html>

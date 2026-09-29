@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}FitBuddy — Dashboard{% endblock %}
+
+{% block content %}
+
+<section class="profile">
+    <div>
+        <p class="eyebrow">ADMIN / COACH VIEW</p>
+        <h1>All users &amp; plans</h1>
+        <p>Review saved profiles and original/updated plan versions.</p>
+    </div>
+</section>
+
+{% if not admin_protected %}
+<div class="alert warn">
+    No ADMIN_KEY is set, so this dashboard is open to anyone.
+    Set ADMIN_KEY in your .env file before deploying.
+</div>
+{% endif %}
+
+{% for row in rows %}
+
+<section class="card admin-row">
+    <div class="user-head">
+        <div>
+            <h2>{{ row.user.username }}</h2>
+            <p>
+                <b>ID:</b> {{ row.user.user_id }} ·
+                <b>Age:</b> {{ row.user.age }} ·
+                <b>Weight:</b> {{ row.user.weight }} kg ·
+                <b>Goal:</b> {{ row.user.goal }} ·
+                <b>Intensity:</b> {{ row.user.intensity }}
+            </p>
+        </div>
+
+        <form method="post" action="/admin/delete/{{ row.user.user_id }}"
+              onsubmit="return confirm('Delete {{ row.user.user_id }} and all their plans?');">
+            <input type="hidden" name="admin_key" value="{{ admin_key or '' }}">
+            <button class="danger" type="submit">Delete</button>
+        </form>
+    </div>
+
+    {% for plan in row.plans %}
+    <details>
+        <summary>
+            Plan #{{ plan.id }} — {{ plan.created_at.strftime('%Y-%m-%d %H:%M') }} UTC
+            {% if plan.updated_plan %}<span class="badge small-badge">updated</span>{% endif %}
+        </summary>
+
+        <h3>Original</h3>
+        <pre class="plan small">{{ plan.original_plan }}</pre>
+
+        {% if plan.updated_plan %}
+        <h3>Updated</h3>
+        <pre class="plan small">{{ plan.updated_plan }}</pre>
+        <p><b>Feedback:</b> {{ plan.feedback }}</p>
+        {% endif %}
+    </details>
+    {% endfor %}
+</section>
+
+{% else %}
+
+<section class="card">
+    <p>No users yet.</p>
+</section>
+
+{% endfor %}
+
+{% endblock %}

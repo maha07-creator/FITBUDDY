@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Admin access{% endblock %}
+
+{% block content %}
+
+<section class="card narrow">
+    <h1>Dashboard access</h1>
+
+    {% if error %}
+    <div class="alert">{{ error }}</div>
+    {% endif %}
+
+    <form method="get" action="/view-all-users" class="stack">
+        <label>
+            Admin key
+            <input type="password" name="admin_key" required>
+        </label>
+        <button type="submit">Open dashboard</button>
+    </form>
+</section>
+
+{% endblock %}
